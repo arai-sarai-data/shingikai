@@ -35,8 +35,9 @@ def run():
     org = ""
     for u, r in tables():
         cells = [str(c).strip() if c is not None else "" for c in r]
-        if any(re.search(r"(省|庁|府|委員会)$", c) for c in cells[:1]) and not any("審議会" in c or "会議" in c for c in cells[:2]):
-            org = cells[0]
+        c0 = re.sub(r"[\s\u3000]|\(\d+\)|（\d+）", "", cells[0]) if cells else ""
+        if c0 and re.search(r"(省|庁|府|内閣官房|委員会)$", c0) and "審議会" not in c0 and "会議" not in c0:
+            org = c0
         name = next((c for c in cells if re.search(r"(審議会|会議|審査会|委員会|分科会)$", c)), None)
         nums = [oc.num(c) for c in cells if re.fullmatch(r"[\d,.]+%?", c.replace(" ", ""))]
         nums = [n for n in nums if n is not None]
