@@ -54,7 +54,7 @@
       if (staticT[k]) el.textContent = staticT[k][LANG === "en" ? 1 : 0];
     });
     $("footsrc").textContent = (LANG === "en" ? "Sources: " : "出典：") +
-      (META.sources || S.sources || []).map(function (s) { return s.name; }).join(" / ");
+      (META.sources || S.sources || []).map(function (s) { return s.name; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(" / ");
     if ((S.langs || []).indexOf("en") >= 0) {
       $("langbtn").hidden = false;
       $("langbtn").textContent = LANG === "en" ? "日本語" : "EN";
@@ -219,12 +219,19 @@
       LAYER = L.layerGroup();
       var maxv = 0; g.points.forEach(function (p) { maxv = Math.max(maxv, p[2]); });
       var bounds = [];
+      // 円の大きさは地図の拡大率に合わせる（広域表示で円が重なって塊にならないように）
+      var size = function () { var z = MAP.getZoom(); return Math.max(0.35, Math.min(1.4, (z - 4) / 7)); };
+      var marks = [];
       g.points.forEach(function (p) {
-        var r = 4 + 14 * Math.sqrt(p[2] / (maxv || 1));
-        var m = L.circleMarker([p[0], p[1]], { radius: r, color: S.color, weight: 1, fillColor: S.color, fillOpacity: 0.45 });
+        var base = 3 + 12 * Math.sqrt(p[2] / (maxv || 1));
+        var m = L.circleMarker([p[0], p[1]], { radius: base * size(), color: "#fff", weight: 0.8, fillColor: S.color, fillOpacity: 0.6 });
+        m._base = base; marks.push(m);
         m.bindPopup("<b>" + esc(p[3]) + "</b><br>" + esc(p[4] || "").replace(/\n/g, "<br>"));
         LAYER.addLayer(m); bounds.push([p[0], p[1]]);
       });
+      if (MAP._aswkZoom) MAP.off("zoomend", MAP._aswkZoom);
+      MAP._aswkZoom = function () { var k = size(); marks.forEach(function (m) { m.setRadius(m._base * k); }); };
+      MAP.on("zoomend", MAP._aswkZoom);
       LAYER.addTo(MAP);
       if (bounds.length) MAP.fitBounds(bounds, { padding: [20, 20], maxZoom: 14 });
     });
