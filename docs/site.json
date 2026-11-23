@@ -1,0 +1,31 @@
+{
+ "repo": "arai-sarai-data/shingikai",
+ "title": "審議会の顔ぶれ",
+ "title_en": "Who Sits on Government Councils",
+ "short": "審議会の顔ぶれ",
+ "short_en": "Who Sits on Government Councils",
+ "tagline": "国の方針を話し合う審議会。委員の女性比率が政府目標（40％）に届かない会議はどこか。",
+ "tagline_en": "Government advisory councils shape national policy. Which ones fall short of the 40% target for women members?",
+ "color": "#7048e8",
+ "hashtags": [
+  "審議会",
+  "ジェンダー"
+ ],
+ "langs": [
+  "ja",
+  "en"
+ ],
+ "search": {
+  "placeholder": "審議会名・府省で検索",
+  "placeholder_en": "Search"
+ },
+ "about": {
+  "what": "内閣府の調査に載る審議会ごとの委員数・女性委員数から、女性の割合を比べます。",
+  "method": "女性委員数÷委員数。",
+  "notes": [
+   "専門委員・臨時委員は含みません。",
+   "役職で決まる委員が多い会議は割合が低くなりやすいです。"
+  ]
+ },
+ "contact": "arai-sarai-data@proton.me"
+}
